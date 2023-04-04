@@ -1,4 +1,10 @@
 
+#
+#   CLASE MAIN WINDOW
+#   -----------------
+#   /RELLENAR/
+#
+
 import tkinter as tk
 import Utilities
 
@@ -9,6 +15,22 @@ class MainWindow:
     def __init__(self):
         self.main_window = tk.Tk()
         self.init_gui()
+
+    def reset(self):
+        self.main_window.destroy()
+        self.main_window = tk.Tk()
+        self.init_gui()
+
+    @staticmethod
+    def basic():
+        pass
+
+    @staticmethod
+    def complete():
+        pass
+
+    def exit(self):
+        self.main_window.destroy()
 
     @staticmethod
     def init_header(main_frame):
@@ -46,28 +68,27 @@ class MainWindow:
         alg_label.config(highlightthickness=0, bd=0, bg=right_frame["bg"])
         alg_label.pack(pady=30)
 
-    @staticmethod
-    def init_footer(main_frame):
+    def init_footer(self, main_frame):
         footer_frame = tk.Frame(main_frame, height=100, bg=Utilities.LIGHT_GREEN)
         footer_frame.pack(side=tk.BOTTOM, fill=tk.X)
         # Botón reset
         reset_button = tk.Button(footer_frame, text="RESET", width=12, height=2, font=Utilities.font_button,
-                                 bg=Utilities.GREEN)
+                                 bg=Utilities.GREEN, command=self.reset)
         reset_button.pack(side="left", padx=165, pady=10)
         reset_button.config(bd=2, relief=tk.GROOVE)
         # Botón ID3 básico
         basic_button = tk.Button(footer_frame, text="ID3 Básico", width=20, height=2, font=Utilities.font_button,
-                                 bg=Utilities.GREEN)
+                                 bg=Utilities.GREEN, command=MainWindow.basic)
         basic_button.pack(side="left", padx=20, pady=10)
         basic_button.config(bd=2, relief=tk.GROOVE)
         # Botón ID3 completo
         complete_button = tk.Button(footer_frame, text="ID3 Completo", width=20, height=2, font=Utilities.font_button,
-                                    bg=Utilities.GREEN)
+                                    bg=Utilities.GREEN, command=MainWindow.complete)
         complete_button.pack(side="left", padx=20, pady=10)
         complete_button.config(bd=2, relief=tk.GROOVE)
         # Botón salir
         exit_button = tk.Button(footer_frame, text="SALIR", width=12, height=2, font=Utilities.font_button,
-                                bg=Utilities.GREEN)
+                                bg=Utilities.GREEN, command=self.exit)
         exit_button.pack(side="left", padx=165, pady=10)
         exit_button.config(bd=2, relief=tk.GROOVE)
 
@@ -75,7 +96,7 @@ class MainWindow:
 
     def init_gui(self):
         self.main_window.title("ID3 Algorithm")
-        self.main_window.geometry("1500x800")
+        self.main_window.geometry(Utilities.DIM)
 
         # -------------- MAIN ----------------
         main_frame = tk.Frame(self.main_window, highlightthickness=2, highlightbackground=Utilities.BLACK)
@@ -91,7 +112,7 @@ class MainWindow:
         MainWindow.init_content(main_frame)
 
         # ---------- FOOTER -----------
-        MainWindow.init_footer(main_frame)
+        self.init_footer(main_frame)
         # Borde frame
         footer_border = tk.Frame(main_frame, height=2, bg=Utilities.GRAY)
         footer_border.pack(fill=tk.X, side=tk.BOTTOM)

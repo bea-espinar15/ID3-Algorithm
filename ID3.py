@@ -57,7 +57,7 @@ class ID3:
 
         return merits
 
-    def id3_algorithm(self, attributes, data):
+    def id3_algorithm(self, attributes, data, basic):
 
         # Creamos el nodo raíz
         root = Node(self.num, attributes, data)
@@ -93,13 +93,14 @@ class ID3:
                 mask_col[best_index] = False
                 child_data = data[mask_fila, mask_col]
                 # TODO: mostrar tabla A3
-                # Llamada recursiva
-                child = self.id3_algorithm(children_attr, child_data)
-                # Añadimos el hijo a la raíz
-                root.set_children(best_attr, child)
+                if not basic:
+                    # Llamada recursiva
+                    child = self.id3_algorithm(children_attr, child_data)
+                    # Añadimos el hijo a la raíz
+                    root.set_children(best_attr, child)
 
         return root
 
     # Métodos públicos:
-    def algorithm(self):
-        return self.id3_algorithm(self.attributes_input, self.data_input)
+    def algorithm(self, basic):
+        return self.id3_algorithm(self.attributes_input, self.data_input, basic)
