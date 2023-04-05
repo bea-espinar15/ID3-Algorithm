@@ -12,8 +12,10 @@ import Utilities
 class MainWindow:
 
     # Constructor:
-    def __init__(self):
+    def __init__(self, attributes, data):
         self.main_window = tk.Tk()
+        self.attributes = attributes
+        self.data = data
         self.init_gui()
 
     # Métodos privados:
@@ -61,6 +63,7 @@ class MainWindow:
         input_label = tk.Label(left_frame, text="ENTRADA", font=Utilities.font_subtitle)
         input_label.config(highlightthickness=0, bd=0, bg=left_frame["bg"])
         input_label.pack(pady=30)
+        
 
         # Frame de árbol de decisión
         middle_frame = tk.Frame(content_frame, bg=Utilities.WHITE)

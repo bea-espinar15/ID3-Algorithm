@@ -95,7 +95,7 @@ class ID3:
                 # TODO: mostrar tabla A3
                 if not basic:
                     # Llamada recursiva
-                    child = self.id3_algorithm(children_attr, child_data)
+                    child = self.id3_algorithm(children_attr, child_data, basic)
                     # Añadimos el hijo a la raíz
                     root.set_children(best_attr, child)
 
