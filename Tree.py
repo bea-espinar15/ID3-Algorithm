@@ -2,7 +2,8 @@
 #
 #   CLASE ÁRBOL DE DECISIÓN
 #   -----------------------
-#   /RELLENAR/
+#   Clase que dibuja el árbol de decisión una vez terminado el algoritmo
+#   · root = nodo raíz del árbol a partir del cual lo dibuja
 #
 
 class Tree:

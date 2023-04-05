@@ -10,10 +10,10 @@ DIM = "1500x800"
 
 # Colores
 WHITE = '#FFFFFF'
+BLACK = '#000000'
 LIGHT_GREEN = '#DDE8B3'
 GREEN = '#8FB88E'
 GRAY = '#C3C3C3'
-BLACK = '#000000'
 
 # Fuentes de letra
 font_title = ("consolas", 20)
