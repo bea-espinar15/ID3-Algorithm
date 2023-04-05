@@ -2,7 +2,7 @@
 #
 #   CLASE MAIN
 #   ----------
-#   /RELLENAR/
+#   Clase que inicia la aplicación y lee los datos de entrada
 #
 
 atributosJuego = open('input_files/AtributosJuego.txt', 'r')
@@ -14,4 +14,6 @@ for line in atributosJuego:
 
 from MainWindow import MainWindow
 
+# leer fichero
+# attributes y data
 MainWindow()

@@ -2,7 +2,16 @@
 #
 #   CLASE NODO
 #   ----------
-#   /RELLENAR/
+#   Un nodo representa el estado del algoritmo en un momento concreto:
+#   · num = nº asociado al nodo (para representarlo y distinguirlo al mostrar su info)
+#   · attributes = lista de atributos disponibles en ese nivel del árbol
+#   · data = tabla (matriz) de valores correspondiente a los <attributes> en ese nivel del árbol
+#   · merits = diccionario {atributo:mérito} ORDENADO crecientemente por mérito, con los
+#              <attributes> en ese nivel del árbol
+#   · value = atributo mejor (con menor mérito) que se elige para expander el nodo
+#   · children = diccionario {valor_atributo:nodo} con los hijos del nodo, para cada posible
+#                valor del atributo <value>, se genera un nodo hijo con los correspondientes
+#                <attributes> y <data>
 #
 
 from sortedcontainers import SortedDict
