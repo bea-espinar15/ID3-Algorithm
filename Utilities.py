@@ -19,3 +19,4 @@ GRAY = '#C3C3C3'
 font_title = ("consolas", 20)
 font_subtitle = ("consolas", 30, "underline")
 font_button = ("consolas", 15)
+font_table = ("consolas", 10)

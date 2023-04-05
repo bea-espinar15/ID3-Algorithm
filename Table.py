@@ -1,4 +1,14 @@
+
+#
+#   CLASE TABLA
+#   -----------
+#   /RELLENAR/
+#
+
+
 import tkinter as tk
+
+import Utilities
 
 
 class Table:
@@ -10,14 +20,18 @@ class Table:
         self.init_gui()
 
     def init_gui(self):
-        totalrow = len(self.data)
-        totalcolumn = len(self.attributes)
+        rows = len(self.data)
+        cols = len(self.attributes)
 
-        for i in range(totalrow):
-            for j in range(totalcolumn):
-                e = Entry(self.frame, width == 22, fg='black', font=('Arial', 15, 'bold'))
-                e.grid(row=i, column=j)
-                if i == 1:
-                    e.insert(END, data[j])
-                else:
-                    e.insert(END, self.attributes[i][j])
+        # Pintar nombres de los atributos
+        for j in range(cols):
+            e = tk.Entry(self.frame, width=11, font=Utilities.font_table, bg=Utilities.LIGHT_GREEN)
+            e.grid(row=0, column=j)
+            e.insert(tk.END, self.attributes[j])
+
+        # Pintar valores de la tabla
+        for i in range(rows - 1):
+            for j in range(cols):
+                e = tk.Entry(self.frame, width=11, fg='black', font=Utilities.font_table)
+                e.grid(row=i+1, column=j)
+                e.insert(tk.END, self.data[i+1][j])

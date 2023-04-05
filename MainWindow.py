@@ -7,18 +7,24 @@
 
 import tkinter as tk
 import Utilities
+from Table import Table
+from ID3 import ID3
+from Tree import Tree
 
 
 class MainWindow:
 
     # Constructor:
-    def __init__(self, attributes, data):
+    def __init__(self, attributes_input, data_input):
         self.main_window = tk.Tk()
-        self.attributes = attributes
-        self.data = data
+        self.attributes_input = attributes_input
+        self.data_input = data_input
         self.init_gui()
 
     # Métodos privados:
+
+    # Funciones de los botones:
+    # -------------------------
 
     # Reinicia la aplicación
     def reset(self):
@@ -26,19 +32,19 @@ class MainWindow:
         self.main_window = tk.Tk()
         self.init_gui()
 
-    # Ejecuta el algoritmo con un sólo nivel de recursividad
-    @staticmethod
-    def basic():
-        pass
-
-    # Ejecuta el algoritmo completo
-    @staticmethod
-    def complete():
-        pass
+    # Ejecuta el algoritmo
+    def ex_algorithm(self, basic):
+        alg = ID3(self.attributes_input, self.data_input, basic)
+        root = alg.algorithm()
+        tree = Tree(root)
+        tree.draw_tree()
 
     # Termina la aplicación
     def exit(self):
         self.main_window.destroy()
+
+    # Pintar paneles:
+    # ---------------
 
     # Inicializar (pintar) el header
     @staticmethod
@@ -51,29 +57,33 @@ class MainWindow:
         title_label.pack(pady=20)
 
     # Inicializar (pintar) el panel de contenido principal
-    @staticmethod
-    def init_content(main_frame):
+    def init_content(self, main_frame):
         content_frame = tk.Frame(main_frame, bg=Utilities.WHITE)
         content_frame.pack(expand=True, fill=tk.BOTH)
 
         # -------------- CONTENT AREAS -------------
         # Frame de tabla input
-        left_frame = tk.Frame(content_frame, bg=Utilities.WHITE)
-        left_frame.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
-        input_label = tk.Label(left_frame, text="ENTRADA", font=Utilities.font_subtitle)
-        input_label.config(highlightthickness=0, bd=0, bg=left_frame["bg"])
+        left_frame = tk.Frame(content_frame, bg=content_frame["bg"])
+        left_frame.pack(side=tk.LEFT, expand=False, fill=tk.BOTH)
+        label_frame = tk.Frame(left_frame, bg=left_frame["bg"])
+        label_frame.pack(side=tk.TOP, expand=False, fill=tk.BOTH)
+        input_label = tk.Label(label_frame, text="ENTRADA", font=Utilities.font_subtitle)
+        input_label.config(highlightthickness=0, bd=0, bg=label_frame["bg"])
         input_label.pack(pady=30)
-        
+        table_frame = tk.Frame(left_frame, bg=Utilities.GREEN)
+        table_frame.configure(borderwidth=1, relief="solid")
+        table_frame.pack(side=tk.TOP, expand=False, fill=tk.BOTH, padx=40)
+        Table(self.attributes_input, self.data_input, table_frame)
 
         # Frame de árbol de decisión
-        middle_frame = tk.Frame(content_frame, bg=Utilities.WHITE)
+        middle_frame = tk.Frame(content_frame, bg=content_frame["bg"])
         middle_frame.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
         tree_label = tk.Label(middle_frame, text="ÁRBOL DE DECISIÓN", font=Utilities.font_subtitle)
         tree_label.config(highlightthickness=0, bd=0, bg=middle_frame["bg"])
         tree_label.pack(pady=30)
 
         # Frame de info algoritmo
-        right_frame = tk.Frame(content_frame, bg=Utilities.WHITE)
+        right_frame = tk.Frame(content_frame, bg=content_frame["bg"])
         right_frame.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
         alg_label = tk.Label(right_frame, text="ALGORITMO", font=Utilities.font_subtitle)
         alg_label.config(highlightthickness=0, bd=0, bg=right_frame["bg"])
@@ -92,13 +102,13 @@ class MainWindow:
 
         # Botón ID3 básico
         basic_button = tk.Button(footer_frame, text="ID3 Básico", width=20, height=2, font=Utilities.font_button,
-                                 bg=Utilities.GREEN, command=MainWindow.basic)
+                                 bg=Utilities.GREEN, command=lambda: self.ex_algorithm(True))
         basic_button.pack(side="left", padx=20, pady=10)
         basic_button.config(bd=2, relief=tk.GROOVE)
 
         # Botón ID3 completo
         complete_button = tk.Button(footer_frame, text="ID3 Completo", width=20, height=2, font=Utilities.font_button,
-                                    bg=Utilities.GREEN, command=MainWindow.complete)
+                                    bg=Utilities.GREEN, command=lambda: self.ex_algorithm(False))
         complete_button.pack(side="left", padx=20, pady=10)
         complete_button.config(bd=2, relief=tk.GROOVE)
 
@@ -126,7 +136,7 @@ class MainWindow:
         header_border.pack(fill=tk.X, side=tk.TOP)
 
         # -------------- CONTENT -------------
-        MainWindow.init_content(main_frame)
+        self.init_content(main_frame)
 
         # ---------- FOOTER -----------
         self.init_footer(main_frame)

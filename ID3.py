@@ -14,18 +14,22 @@ from Node import Node
 class ID3:
 
     # Constructor:
-    def __init__(self, attributes_input, data_input):
+    def __init__(self, attributes_input, data_input, basic):
         self.num = 1
         self.attributes_input = attributes_input
         self.data_input = data_input
-        self.decision = attributes_input.index("Jugar")
+        self.basic = basic
 
     # Métodos privados:
     @staticmethod
     def infor(p, n):
-        return (-p * math.log(p, 2)) - (n * math.log(n, 2))
+        if p == 0 or n == 0:
+            return 0
+        else:
+            return (-p * math.log(p, 2)) - (n * math.log(n, 2))
 
-    def calculate_merits(self, attributes, data):
+    @staticmethod
+    def calculate_merits(attributes, data):
 
         # Inicializamos variables:
 
@@ -46,7 +50,7 @@ class ID3:
             # Calculamos a_v, p_v, n_v, r_v
             for v in values:
                 a[v] = np.count_nonzero(data[:, i] == v)
-                p[v] = np.count_nonzero((data[:, i] == v) & (data[:, self.decision] == "si"))
+                p[v] = np.count_nonzero((data[:, i] == v) & (data[:, -1] == "si"))
                 n[v] = a[v] - p[v]
                 r[v] = a[v] / n_total
 
@@ -57,16 +61,16 @@ class ID3:
 
         return merits
 
-    def id3_algorithm(self, attributes, data, basic):
+    def id3_algorithm(self, attributes, data):
 
         # Creamos el nodo raíz
         root = Node(self.num, attributes, data)
 
         # CASOS BASE:
-        if not np.any(data[:, self.decision] == "si"):
+        if not np.any(data[:, -1] == "si"):
             root.set_value("no")
             # TODO: cout A3 << "Todos los ejemplares son "No"
-        elif not np.any(data[:, self.decision] == "no"):
+        elif not np.any(data[:, -1] == "no"):
             root.set_value("si")
             # TODO: cout A3 << "Todos los ejemplares son "Si"
 
@@ -89,18 +93,19 @@ class ID3:
             for v in values:
                 self.num = self.num + 1
                 mask_fila = data[:, best_index] == v
-                mask_col = np.ones(data.shape[1], dtype=bool)
+                aux = data[mask_fila, :]
+                mask_col = np.ones(aux.shape[1], dtype=bool)
                 mask_col[best_index] = False
-                child_data = data[mask_fila, mask_col]
+                child_data = aux[:, mask_col]
                 # TODO: mostrar tabla A3
-                if not basic:
+                if not self.basic:
                     # Llamada recursiva
-                    child = self.id3_algorithm(children_attr, child_data, basic)
+                    child = self.id3_algorithm(children_attr, child_data)
                     # Añadimos el hijo a la raíz
                     root.set_children(best_attr, child)
 
         return root
 
     # Métodos públicos:
-    def algorithm(self, basic):
-        return self.id3_algorithm(self.attributes_input, self.data_input, basic)
+    def algorithm(self):
+        return self.id3_algorithm(self.attributes_input, self.data_input)
