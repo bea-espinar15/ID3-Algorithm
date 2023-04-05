@@ -102,7 +102,7 @@ class ID3:
                     # Llamada recursiva
                     child = self.id3_algorithm(children_attr, child_data)
                     # Añadimos el hijo a la raíz
-                    root.set_children(best_attr, child)
+                    root.set_children(v, child)
 
         return root
 
