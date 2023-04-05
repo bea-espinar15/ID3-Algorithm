@@ -1,5 +1,5 @@
-
 import tkinter as tk
+
 
 class Table:
 
@@ -7,15 +7,17 @@ class Table:
         self.attributes = attributes_input
         self.data = data_input
         self.frame = table_frame
-        self.init_GUI()
+        self.init_gui()
 
-    def init_GUI(self):
-        table = tk.Listbox(self.frame, width=50, height=10)
-        table.grid(row=0, column=0, padx=10, pady=10)
-        for header in self.attributes:
-            table.insert(tk.END, header)
+    def init_gui(self):
+        totalrow = len(self.data)
+        totalcolumn = len(self.attributes)
 
-        for row in self.data:
-            table.insert(tk.END, row)
-
-        table.configure(bg="white", fg="black", font=("console", 12))
+        for i in range(totalrow):
+            for j in range(totalcolumn):
+                e = Entry(self.frame, width == 22, fg='black', font=('Arial', 15, 'bold'))
+                e.grid(row=i, column=j)
+                if i == 1:
+                    e.insert(END, data[j])
+                else:
+                    e.insert(END, self.attributes[i][j])
