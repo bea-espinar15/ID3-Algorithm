@@ -94,6 +94,8 @@ class MainWindow:
         alg_label = tk.Label(right_frame, text="ALGORITMO", font=Utilities.FONT_SUBTITLE)
         alg_label.config(highlightthickness=0, bd=0, bg=right_frame["bg"])
         alg_label.pack(pady=30)
+        my_scrollbar = tk.Scrollbar(right_frame, orient="vertical")
+        my_scrollbar.pack(side="right", fill="y")
 
     # Inicializar (pintar) el footer
     def init_footer(self, main_frame):
