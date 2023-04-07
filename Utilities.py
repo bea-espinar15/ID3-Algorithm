@@ -23,6 +23,6 @@ FONT_BUTTON = ("consolas", 15)
 FONT_ATTRIBUTES = ("consolas", 10, "bold")
 FONT_TABLE = ("consolas", 10)
 
-# Distancias nodos
+# Distancias nodos árbol
 VERTICAL_DIST = 100
-HORIZONTAL_DIST = 75
+HORIZONTAL_DIST = 50

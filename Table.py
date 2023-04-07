@@ -2,7 +2,10 @@
 #
 #   CLASE TABLA
 #   -----------
-#   /RELLENAR/
+#   Clase que dibuja la tabla de datos de entrada. Atributos:
+#   · attributes = lista de atributos (nombres de las columnas)
+#   · data = matriz de datos de la tabla
+#   · frame = frame en el que se dibuja la tabla
 #
 
 
@@ -13,12 +16,16 @@ import Utilities
 
 class Table:
 
+    # Constructor:
     def __init__(self, attributes_input, data_input, table_frame):
         self.attributes = attributes_input
         self.data = data_input
         self.frame = table_frame
         self.init_gui()
 
+    # Métodos privados:
+
+    # Dibuja la tabla
     def init_gui(self):
         rows = len(self.data)
         cols = len(self.attributes)
