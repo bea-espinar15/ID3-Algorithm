@@ -30,6 +30,8 @@ class MainWindow:
         self.main_frame = None
         self.middle_frame = None
         self.canvas = None
+        self.basic_button = None
+        self.complete_button = None
         self.init_gui()
 
     # Métodos privados:
@@ -48,6 +50,9 @@ class MainWindow:
         root = alg.algorithm()
         tree = Tree(root, self.canvas)
         tree.draw_tree()
+        # Deshabilitar botones del algoritmo
+        self.basic_button.config(state="disabled")
+        self.complete_button.config(state="disabled")
 
     # Termina la aplicación
     def exit(self):
@@ -124,16 +129,16 @@ class MainWindow:
         reset_button.config(bd=2, relief=tk.GROOVE)
 
         # Botón ID3 básico
-        basic_button = tk.Button(footer_frame, text="ID3 Básico", width=20, height=2, font=Utilities.FONT_BUTTON,
+        self.basic_button = tk.Button(footer_frame, text="ID3 Básico", width=20, height=2, font=Utilities.FONT_BUTTON,
                                  bg=Utilities.GREEN, command=lambda: self.ex_algorithm(True))
-        basic_button.pack(side="left", padx=30, pady=10)
-        basic_button.config(bd=2, relief=tk.GROOVE)
+        self.basic_button.pack(side="left", padx=30, pady=10)
+        self.basic_button.config(bd=2, relief=tk.GROOVE)
 
         # Botón ID3 completo
-        complete_button = tk.Button(footer_frame, text="ID3 Completo", width=20, height=2, font=Utilities.FONT_BUTTON,
+        self.complete_button = tk.Button(footer_frame, text="ID3 Completo", width=20, height=2, font=Utilities.FONT_BUTTON,
                                     bg=Utilities.GREEN, command=lambda: self.ex_algorithm(False))
-        complete_button.pack(side="left", padx=30, pady=10)
-        complete_button.config(bd=2, relief=tk.GROOVE)
+        self.complete_button.pack(side="left", padx=30, pady=10)
+        self.complete_button.config(bd=2, relief=tk.GROOVE)
 
         # Botón salir
         exit_button = tk.Button(footer_frame, text="SALIR", width=12, height=2, font=Utilities.FONT_BUTTON,

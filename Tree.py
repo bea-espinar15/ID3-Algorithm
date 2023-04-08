@@ -59,7 +59,7 @@ class Tree:
             new_y = y + Utilities.VERTICAL_DIST
             # Visitar cada hijo
             for c in node.get_children().keys():
-                # Dibujar arista con el valor del atributo
+                # Dibujar rama con el valor del atributo
                 self.canvas.create_line(x+25, y+25, new_x+25, new_y+25, fill=Utilities.BLACK)
                 self.canvas.create_text((x+new_x+50)//2, (y+new_y+50)//2, text=c,  fill=Utilities.BLACK, font=Utilities.FONT_TABLE)
                 # Llamada recursiva, dibujar hijo
