@@ -79,4 +79,4 @@ class Tree:
 
     # Métodos públicos:
     def draw_tree(self):
-        self.draw(self.root, (270, 20), False)
+        self.draw(self.root, (230, 20), False)

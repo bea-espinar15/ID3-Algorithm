@@ -19,10 +19,11 @@ RED = '#AD1B1B'
 # Fuentes de letra
 FONT_TITLE = ("consolas", 20)
 FONT_SUBTITLE = ("consolas", 30, "underline")
+FONT_SUBSUBTITLE = ("consolas", 20, "underline")
 FONT_BUTTON = ("consolas", 15)
 FONT_ATTRIBUTES = ("consolas", 10, "bold")
 FONT_TABLE = ("consolas", 10)
 
 # Distancias nodos árbol
 VERTICAL_DIST = 100
-HORIZONTAL_DIST = 50
+HORIZONTAL_DIST = 45

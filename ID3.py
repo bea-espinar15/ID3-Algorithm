@@ -18,11 +18,13 @@ from Node import Node
 class ID3:
 
     # Constructor:
-    def __init__(self, attributes_input, data_input, basic):
+    def __init__(self, attributes_input, data_input, basic, info_alg, rules):
         self.num = 1
         self.attributes_input = attributes_input
         self.data_input = data_input
         self.basic = basic
+        self.info = info_alg
+        self.rules = rules
 
     # Métodos privados:
 
@@ -79,18 +81,21 @@ class ID3:
         # CASOS BASE: todos los ejemplares tienen el mismo valor de decisión
         if not np.any(data[:, -1] == "si"):
             root.set_value("no")
-            # TODO: cout A3 << "Todos los ejemplares son "No"
+            # Imprimir info
+            self.info.draw_text(root.get_num(), False)
         elif not np.any(data[:, -1] == "no"):
             root.set_value("si")
-            # TODO: cout A3 << "Todos los ejemplares son "Si"
+            # Imprimir info
+            self.info.draw_text(root.get_num(), True)
 
         # CASO RECURSIVO: hay ejemplares positivos y ejemplares negativos
         else:
             # Calculamos méritos de los atributos y escogemos el mejor (menor mérito)
             root.set_merits(self.calculate_merits(attributes, data))
-            # TODO: mostrar méritos A3
             best_attr = next(iter(root.get_merits()))
             root.set_value(best_attr)
+            # Imprimir info
+            self.info.draw_list(root.get_num(), root.get_merits())
 
             # Preparamos llamadas recursivas
 
@@ -109,7 +114,8 @@ class ID3:
                 mask_col = np.ones(aux.shape[1], dtype=bool)
                 mask_col[best_index] = False
                 child_data = aux[:, mask_col]
-                # TODO: mostrar tabla A3
+                # Imprimir info
+                self.info.draw_table(v, children_attr, child_data)
                 # La versión básica se queda aquí, no implementa más niveles de recursividad
                 if not self.basic:
                     # Llamada recursiva
@@ -121,4 +127,6 @@ class ID3:
 
     # Métodos públicos:
     def algorithm(self):
-        return self.id3_algorithm(self.attributes_input, self.data_input)
+        root = self.id3_algorithm(self.attributes_input, self.data_input)
+        self.rules.draw_rules(root, self.basic)
+        return root

@@ -18,6 +18,9 @@ import Utilities
 from Table import Table
 from ID3 import ID3
 from Tree import Tree
+from Info import Info
+from Rules import Rules
+from Decision import Decision
 
 
 class MainWindow:
@@ -32,6 +35,9 @@ class MainWindow:
         self.canvas = None
         self.basic_button = None
         self.complete_button = None
+        self.info_alg = None
+        self.rules = None
+        self.decision = None
         self.init_gui()
 
     # Métodos privados:
@@ -46,13 +52,15 @@ class MainWindow:
 
     # Ejecuta el algoritmo y dibuja el árbol solución
     def ex_algorithm(self, basic):
-        alg = ID3(self.attributes_input, self.data_input, basic)
+        alg = ID3(self.attributes_input, self.data_input, basic, self.info_alg, self.rules)
         root = alg.algorithm()
         tree = Tree(root, self.canvas)
         tree.draw_tree()
         # Deshabilitar botones del algoritmo
         self.basic_button.config(state="disabled")
         self.complete_button.config(state="disabled")
+        # Activar botón decisión
+        self.decision.set_executed(True)
 
     # Termina la aplicación
     def exit(self):
@@ -76,22 +84,40 @@ class MainWindow:
         content_frame.pack(expand=True, fill=tk.BOTH)
 
         # -------------- LEFT -------------
+
+        # -------------- TABLA ------------
         # Frame de tabla input
         left_frame = tk.Frame(content_frame, bg=content_frame["bg"])
         left_frame.pack(side=tk.LEFT, expand=False, fill=tk.BOTH)
         # Label título
-        label_frame = tk.Frame(left_frame, bg=left_frame["bg"])
-        label_frame.pack(side=tk.TOP, expand=False, fill=tk.BOTH)
-        input_label = tk.Label(label_frame, text="ENTRADA", font=Utilities.FONT_SUBTITLE)
-        input_label.config(highlightthickness=0, bd=0, bg=label_frame["bg"])
+        label_input_frame = tk.Frame(left_frame, bg=left_frame["bg"])
+        label_input_frame.pack(side=tk.TOP, expand=False, fill=tk.BOTH)
+        input_label = tk.Label(label_input_frame, text="ENTRADA", font=Utilities.FONT_SUBTITLE)
+        input_label.config(highlightthickness=0, bd=0, bg=label_input_frame["bg"])
         input_label.pack(pady=30)
         # Tabla
         table_frame = tk.Frame(left_frame, bg=left_frame["bg"])
         table_frame.configure(borderwidth=1, relief="solid")
-        table_frame.pack(side=tk.TOP, expand=False, fill=tk.BOTH, padx=40)
+        table_frame.pack(side=tk.TOP, expand=False, fill=tk.BOTH, padx=30)
         Table(self.attributes_input, self.data_input, table_frame)
 
+        # -------------- REGLAS ------------
+        # Label título
+        rules_label = tk.Label(left_frame, text="REGLAS", font=Utilities.FONT_SUBSUBTITLE, justify="left")
+        rules_label.config(highlightthickness=0, bd=0, bg=left_frame["bg"])
+        rules_label.pack(side=tk.TOP, padx=30, pady=20, anchor=tk.W)
+        # Rellenar reglas
+        rules_frame = tk.Frame(left_frame, bg=left_frame["bg"])
+        rules_frame.pack(side=tk.TOP, padx=30, expand=True, fill=tk.BOTH)
+        rules_frame.pack_propagate(False)
+        self.rules = Rules(rules_frame)
+        # Borde frame
+        empty_frame = tk.Frame(left_frame, height=40, bg=left_frame["bg"])
+        empty_frame.pack(side=tk.BOTTOM, fill=tk.X)
+
         # -------------- MIDDLE -------------
+
+        # -------------- ÁRBOL ------------
         # Frame de árbol de decisión
         self.middle_frame = tk.Frame(content_frame, bg=content_frame["bg"])
         self.middle_frame.pack(side=tk.LEFT, expand=False, fill=tk.BOTH)
@@ -100,22 +126,64 @@ class MainWindow:
         tree_label.config(highlightthickness=0, bd=0, bg=self.middle_frame["bg"])
         tree_label.pack(pady=30)
         # Lienzo para pintar el árbol
-        self.canvas = tk.Canvas(self.middle_frame, width=600, height=500, bg=self.middle_frame["bg"])
+        self.canvas = tk.Canvas(self.middle_frame, width=520, height=300, bg=self.middle_frame["bg"])
         self.canvas.config(highlightthickness=0)
-        self.canvas.pack(padx=40, expand=True, fill=tk.X)
+        self.canvas.pack(side=tk.TOP, padx=0, expand=False, fill=tk.X)
+
+        # -------------- DECISIÓN ------------
+        # Label título
+        decision_label = tk.Label(self.middle_frame, text="DECISIÓN", font=Utilities.FONT_SUBSUBTITLE, justify="left")
+        decision_label.config(highlightthickness=0, bd=0, bg=self.middle_frame["bg"])
+        decision_label.pack(side=tk.TOP, pady=10, anchor=tk.W)
+        # Panel decisión
+        decision_frame = tk.Frame(self.middle_frame, bg=self.middle_frame["bg"])
+        decision_frame.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
+        decision_frame.pack_propagate(False)
+        # Canvas decision
+        canvas_decision = tk.Canvas(decision_frame, borderwidth=0, highlightthickness=0, bg=decision_frame["bg"])
+        aux_frame = tk.Frame(canvas_decision, bg=decision_frame["bg"])
+        # Scrollbar
+        scrollbar = tk.Scrollbar(decision_frame, orient="vertical", command=canvas_decision.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y, padx=10)
+        canvas_decision.configure(yscrollcommand=scrollbar.set)
+        canvas_decision.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        # Asociamos frame y scrollbar al canvas
+        aux_frame.bind("<Configure>", lambda e: canvas_decision.configure(scrollregion=canvas_decision.bbox("all")))
+        canvas_decision.create_window((0, 0), window=aux_frame, anchor="nw")
+        self.decision = Decision(aux_frame, False)
+        self.decision.draw_decision()
+        # Borde frame
+        empty_frame = tk.Frame(self.middle_frame, height=40, bg=left_frame["bg"])
+        empty_frame.pack(side=tk.BOTTOM, fill=tk.X)
 
         # -------------- RIGHT -------------
         # Frame de info algoritmo
         right_frame = tk.Frame(content_frame, bg=content_frame["bg"])
         right_frame.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
         # Label título
-        alg_label = tk.Label(right_frame, text="ALGORITMO", font=Utilities.FONT_SUBTITLE)
-        alg_label.config(highlightthickness=0, bd=0, bg=right_frame["bg"])
+        label_alg_frame = tk.Frame(right_frame, bg=right_frame["bg"])
+        label_alg_frame.pack(side=tk.TOP, expand=False, fill=tk.BOTH)
+        alg_label = tk.Label(label_alg_frame, text="ALGORITMO", font=Utilities.FONT_SUBTITLE)
+        alg_label.config(highlightthickness=0, bd=0, bg=label_alg_frame["bg"])
         alg_label.pack(pady=30)
         # Información del algoritmo
-        # TODO: info algoritmo
-        my_scrollbar = tk.Scrollbar(right_frame, orient="vertical")
-        my_scrollbar.pack(side="right", fill="y")
+        info_frame = tk.Frame(right_frame, bg=right_frame["bg"])
+        info_frame.pack(side=tk.TOP, expand=True, padx=30, fill=tk.BOTH)
+        # Canvas info
+        canvas_info = tk.Canvas(info_frame, borderwidth=0, highlightthickness=0, bg=info_frame["bg"])
+        aux_frame_2 = tk.Frame(canvas_info, bg=info_frame["bg"])
+        scrollbar_2 = tk.Scrollbar(info_frame, orient="vertical", command=canvas_info.yview)
+        scrollbar_2.pack(side=tk.RIGHT, fill=tk.Y, padx=10)
+        canvas_info.configure(yscrollcommand=scrollbar_2.set)
+        canvas_info.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        # Asociamos frame y scrollbar al canvas
+        aux_frame_2.bind("<Configure>", lambda e: canvas_info.configure(scrollregion=canvas_info.bbox("all")))
+        canvas_info.create_window((0, 0), window=aux_frame_2, anchor="nw")
+        # Rellenar info
+        self.info_alg = Info(aux_frame_2)
+        # Borde frame
+        empty_frame_2 = tk.Frame(right_frame, height=40, bg=right_frame["bg"])
+        empty_frame_2.pack(side=tk.BOTTOM, fill=tk.X)
 
     # Inicializar (pintar) el footer
     def init_footer(self):
@@ -125,25 +193,25 @@ class MainWindow:
         # Botón reset
         reset_button = tk.Button(footer_frame, text="RESET", width=12, height=2, font=Utilities.FONT_BUTTON,
                                  bg=Utilities.GREEN, command=self.reset)
-        reset_button.pack(side="left", padx=230, pady=10)
+        reset_button.pack(side="left", padx=168, pady=10)
         reset_button.config(bd=2, relief=tk.GROOVE)
 
         # Botón ID3 básico
         self.basic_button = tk.Button(footer_frame, text="ID3 Básico", width=20, height=2, font=Utilities.FONT_BUTTON,
                                  bg=Utilities.GREEN, command=lambda: self.ex_algorithm(True))
-        self.basic_button.pack(side="left", padx=30, pady=10)
+        self.basic_button.pack(side="left", padx=25, pady=10)
         self.basic_button.config(bd=2, relief=tk.GROOVE)
 
         # Botón ID3 completo
         self.complete_button = tk.Button(footer_frame, text="ID3 Completo", width=20, height=2, font=Utilities.FONT_BUTTON,
                                     bg=Utilities.GREEN, command=lambda: self.ex_algorithm(False))
-        self.complete_button.pack(side="left", padx=30, pady=10)
+        self.complete_button.pack(side="left", padx=25, pady=10)
         self.complete_button.config(bd=2, relief=tk.GROOVE)
 
         # Botón salir
         exit_button = tk.Button(footer_frame, text="SALIR", width=12, height=2, font=Utilities.FONT_BUTTON,
                                 bg=Utilities.GREEN, command=self.exit)
-        exit_button.pack(side="left", padx=230, pady=10)
+        exit_button.pack(side="left", padx=168, pady=10)
         exit_button.config(bd=2, relief=tk.GROOVE)
 
         footer_frame.pack_propagate(False)

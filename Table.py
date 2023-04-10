@@ -26,7 +26,7 @@ class Table:
 
     # Dibuja la tabla
     def init_gui(self):
-        rows = len(self.data)
+        rows = len(self.data)+1
         cols = len(self.attributes)
 
         # Ajustar anchura columnas
@@ -35,13 +35,13 @@ class Table:
 
         # Pintar nombres de los atributos
         for j in range(cols):
-            e = tk.Entry(self.frame, width=11, font=Utilities.FONT_ATTRIBUTES, bg=Utilities.LIGHT_GREEN, justify=tk.CENTER)
+            e = tk.Entry(self.frame, width=11, font=Utilities.FONT_ATTRIBUTES, justify=tk.CENTER, bg=Utilities.LIGHT_GREEN)
             e.grid(row=0, column=j, sticky="nsew")
             e.insert(tk.END, self.attributes[j])
 
         # Pintar valores de la tabla
         for i in range(rows - 1):
             for j in range(cols):
-                e = tk.Entry(self.frame, width=11, fg='black', font=Utilities.FONT_TABLE, justify=tk.CENTER)
+                e = tk.Entry(self.frame, width=11, font=Utilities.FONT_TABLE, justify=tk.CENTER, bg=Utilities.WHITE)
                 e.grid(row=i+1, column=j, sticky="nsew")
-                e.insert(tk.END, self.data[i+1][j])
+                e.insert(tk.END, self.data[i][j])
