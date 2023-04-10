@@ -59,8 +59,10 @@ class MainWindow:
         # Deshabilitar botones del algoritmo
         self.basic_button.config(state="disabled")
         self.complete_button.config(state="disabled")
-        # Activar botón decisión
-        self.decision.set_executed(True)
+        if not basic:
+            # Activar botón decisión
+            self.decision.activate_button()
+            self.decision.set_root(root)
 
     # Termina la aplicación
     def exit(self):
@@ -139,18 +141,7 @@ class MainWindow:
         decision_frame = tk.Frame(self.middle_frame, bg=self.middle_frame["bg"])
         decision_frame.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
         decision_frame.pack_propagate(False)
-        # Canvas decision
-        canvas_decision = tk.Canvas(decision_frame, borderwidth=0, highlightthickness=0, bg=decision_frame["bg"])
-        aux_frame = tk.Frame(canvas_decision, bg=decision_frame["bg"])
-        # Scrollbar
-        scrollbar = tk.Scrollbar(decision_frame, orient="vertical", command=canvas_decision.yview)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y, padx=10)
-        canvas_decision.configure(yscrollcommand=scrollbar.set)
-        canvas_decision.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        # Asociamos frame y scrollbar al canvas
-        aux_frame.bind("<Configure>", lambda e: canvas_decision.configure(scrollregion=canvas_decision.bbox("all")))
-        canvas_decision.create_window((0, 0), window=aux_frame, anchor="nw")
-        self.decision = Decision(aux_frame, False)
+        self.decision = Decision(decision_frame)
         self.decision.draw_decision()
         # Borde frame
         empty_frame = tk.Frame(self.middle_frame, height=40, bg=left_frame["bg"])

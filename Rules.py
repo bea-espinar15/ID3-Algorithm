@@ -57,14 +57,14 @@ class Rules:
     # Imprimir reglas
     def draw_rules(self, root, basic):
         if basic:
-            self.rules_text = "No se llegan a generar las reglas"
+            self.rules_text = "No se llegan a generar las reglas."
         else:
             # Generamos reglas
             self.fill_label(root, True, "")
         # Creamos scrollbar y text
         scrollbar = tk.Scrollbar(self.frame)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y, padx=10)
-        text = tk.Text(self.frame, yscrollcommand=scrollbar.set, wrap="word", width=50, borderwidth=0)
+        text = tk.Text(self.frame, yscrollcommand=scrollbar.set, wrap="word", width=50, borderwidth=0, font=Utilities.FONT_TABLE)
         text.pack(side=tk.TOP, anchor=tk.W, expand=True, fill=tk.BOTH)
         scrollbar.config(command=text.yview)
         text.insert(tk.END, self.rules_text)
